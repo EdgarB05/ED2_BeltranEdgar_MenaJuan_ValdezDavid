@@ -41,7 +41,7 @@ class AuthController extends Controller
             'role' => $request->role,
         ];
 
-        // Si es personal, agregar campos extra
+    
         if ($request->role === 'personal') {
             $data['cargo'] = $request->cargo;
             $data['turno'] = $request->turno;

@@ -25,33 +25,33 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Equipos</th>
-                <th>Estadio</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Zona</th>
-                <th>Fila</th>
-                <th>Asiento</th>
+                <th>Nombre Huesped</th>
+                <th>Fecha Ingreso</th>
+                <th>Fecha Fin</th>
+                <th>Num Habitación</th>
+                <th>Metodo Pago</th>
+                <th>EstadoContrato</th>
+                <th>Servicios</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($boletos as $boleto)
+            @foreach ($hoteles as $reservacion)
                 <tr>
-                    <td>{{ $boleto->id }}</td>
-                    <td>{{ $boleto->equipos }}</td>
-                    <td>{{ $boleto->estadio }}</td>
-                    <td>{{ $boleto->fecha }}</td>
-                    <td>{{ $boleto->hora }}</td>
-                    <td>{{ $boleto->zona }}</td>
-                    <td>{{ $boleto->fila }}</td>
-                    <td>{{ $boleto->asiento }}</td>
+                    <td>{{ $reservacion->id }}</td>
+                    <td>{{ $reservacion->nombrehuesped }}</td>
+                    <td>{{ $reservacion->fechaingreso }}</td>
+                    <td>{{ $reservacion->fechafin }}</td>
+                    <td>{{ $reservacion->numhabitacion }}</td>
+                    <td>{{ $reservacion->metodopago }}</td>
+                    <td>{{ $reservacion->estadocontrato }}</td>
+                    <td>{{ $reservacion->servicios }}</td>
                     @if(auth()->user()->role === 'cliente' || auth()->user()->role === 'administrador')
                         <td>
-                            <a href="{{ route('boletos.edit', $boleto) }}" class="btn btn-warning">
+                            <a href="{{ route('hoteles.edit', $reservacion) }}" class="btn btn-warning">
                                 <i class="fa-regular fa-pen-to-square"></i>
                             </a>
-                            <form action="{{ route('boletos.destroy', $boleto) }}" method="POST" class="d-inline">
+                            <form action="{{ route('hoteles.destroy', $reservacion) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-danger" onclick="return confirm('¿Eliminar el registro?')">
