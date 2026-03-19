@@ -33,6 +33,17 @@ class ReservacionesController extends Controller
     public function store(Request $request)
     {
         //
+        Boletos::create([
+            'nombrehuesped' => $request -> nombrehuesped,
+            'fechaingreso' => $request ->fechaingreso,
+            'fechafin' => $request ->fechafin,
+            'numhabitacion' => $request ->numhabitacion,
+            'metodopago' => $request ->metodopago,
+            'estadocontrato' => $request ->estadocontrato,
+            'servicios' => $request ->servicios,            
+        ]);
+
+        return redirect()->route('hoteles.create');
     }
 
     /**
@@ -46,24 +57,43 @@ class ReservacionesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Hoteles $hotel)
     {
         //
+        return view('hoteles.edit', compact('hotel'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Hoteles $hotel)
     {
         //
+        $request - validate([
+            'nombrehuesped' => 'required',
+            'fechaingreso' => 'required',
+            'fechafin' => 'required',
+            'numhabitacion' => 'required',
+            'metodopago' => 'required',
+            'estadocontrato' => 'required',
+            'servicios' => 'required', 
+        ]);
+
+        $hotel -> update($request->all());
+
+        return redirect() -> route('hoteles.index')
+        -> with('success', 'Actualización con éxito');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Hoteles $hotel)
     {
         //
+        $hotel -> delete();
+        
+        return redirect() -> route('hoteles.index')
+        -> with('success', 'Reservación eliminada');
     }
 }
