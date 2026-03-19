@@ -12,6 +12,7 @@ class ReservacionesController extends Controller
     public function index()
     {
         //
+        
     }
 
     /**

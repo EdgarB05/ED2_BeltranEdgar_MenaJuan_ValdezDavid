@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class VerificaUsuario
 {
     /**
      * Handle an incoming request.
@@ -18,13 +18,9 @@ class AdminMiddleware
         if(!Auth::check()){
             return redirect()->route('registro')
             ->with('error', 'Se debe registrar e iniciar sesión');
-        }
 
-        if(!Auth::user()->is_admin){
-            return redirect()->route('hoteles.index')
-            ->with('error', 'No cuentas con permisos de administrador');
         }
-
+        
         return $next($request);
     }
 }
