@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('boletos', function (Blueprint $table) {
+        Schema::create('reservaciones', function (Blueprint $table) {
             $table->id();
-            $table -> string('equipos');
-            $table -> string('estadio');
-            $table -> date('fecha');
-            $table -> time('hora');
-            $table -> string('zona');
-            $table -> integer('fila');
-            $table -> integer('asiento');
+            $table -> string('nombrehuesped');
+            $table -> date('fechaingreso');
+            $table -> date('fechafin');
+            $table -> integer('numhabitacion');
+            $table -> string('metodopago');
+            $table -> string('estadocontrato');
+            $table -> string('servicios');
             $table->timestamps();
         });
     }
