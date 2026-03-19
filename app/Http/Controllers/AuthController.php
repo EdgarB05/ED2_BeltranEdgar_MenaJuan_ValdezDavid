@@ -24,11 +24,13 @@ class AuthController extends Controller
             'phone' => 'required',
             'edad' => 'required',
             'password' => 'required|confirmed|min:8',
-            'role' => 'required|in:cliente,empleado,administrador',
+            'role' => 'required|in:cliente,personal,administrador',
 
             'cargo' => 'nullable|string|',
-            'turno' => 'nullable|string|',
+            'turno' => 'nullable|string|in:matutino,vespertino,nocturno',
         ]);
+
+        $role = $request->role;
 
         // Datos base
         $data = [
@@ -37,14 +39,10 @@ class AuthController extends Controller
             'phone' => $request->phone,
             'edad' => $request->edad,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
+            'role' => $role,
+            'cargo' => $role === 'personal' ? ($request->cargo ?? '') : '',
+            'turno' => $role === 'personal' ? ($request->turno ?? '') : '',
         ];
-
-        // Si es personal, agregar campos extra
-        if ($request->role === 'personal') {
-            $data['cargo'] = $request->cargo;
-            $data['turno'] = $request->turno;
-        }
 
         // Crear usuario
         $user = User::create($data);
@@ -52,7 +50,7 @@ class AuthController extends Controller
         // Login automático
         Auth::login($user);
 
-        return redirect()->route('hoteles.index');
+        return redirect()->route('hoteles.index') ->with('success', 'Usuario registrado correctamente.');
     }
 
     // Mostrar login
@@ -88,5 +86,15 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/acceso');
+    }
+    
+     public function adminDashboard()
+    {
+        return view('admin.dashboard');
+    }
+
+    public function empleadoDashboard()
+    {
+        return redirect()->route('hoteles.index');
     }
 }
