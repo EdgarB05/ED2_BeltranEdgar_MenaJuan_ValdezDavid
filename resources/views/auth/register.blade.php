@@ -13,7 +13,6 @@
 
         <form action="{{ route('registro.store') }}" method="POST">
             @csrf
-            
             <input type="text" name="name" placeholder="Nombre" class="form-control" required>
             <br>
             <input type="email" name="email" placeholder="Correo" class="form-control" required>
@@ -42,19 +41,13 @@
             <select name="role" class="form-control" required>
                 <option value="">Selecciona un tipo de usuario</option>
                 <option value="cliente" {{ old('role') === 'cliente' ? 'selected' : '' }}>Cliente</option>
-<<<<<<< HEAD
-            </select>
-=======
                 @if(auth()->user()->role === 'administrador')
                     <option value="empleado" {{ old('role') === 'empleado' ? 'selected' : '' }}>Empleado</option>
                     <option value="empleado" {{ old('role') === 'administrador' ? 'selected' : '' }}>Administrador</option>
                 @endif
                 </select>
->>>>>>> 12e4e175c195207acf5cf1408210377a61c96b44
             <br>
             <button type="submit" class="btn btn-success">Guardar</button>
-
-
         </form>
 
 
