@@ -5,83 +5,85 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-
 use App\Models\User;
 
 class AuthController extends Controller
 {
-    //Método para regresar vista de registro
-    public function registerForm(){
+    // Mostrar formulario de registro
+    public function registerForm()
+    {
         return view('auth.register');
     }
 
-    //Método para registrar los usuarios
-    public function register(Request $request){
-        $request -> validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',            
-            'phone' => 'required',
+    // Registrar usuario
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|confirmed|min:8',
-            'role' => 'required|in:cliente,empleado,administrador',
+            'role' => 'required|in:administrador,personal',
+
+            // Solo se validan si es personal
+            'cargo' => 'nullable|string|',
+            'turno' => 'nullable|string|',
         ]);
-        //Guardar información en la base de datos
-        $user = User::create([
-            #Variable de base de datos -----> variable del formulario
-            'name' => $request -> name, 
-            'email' => $request -> email,
-            'phone' => $request -> phone,
+
+        // Datos base
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-        ]);
+        ];
 
+        // Si es personal, agregar campos extra
+        if ($request->role === 'personal') {
+            $data['cargo'] = $request->cargo;
+            $data['turno'] = $request->turno;
+        }
 
-        //Inicio de sesión autómatico
+        // Crear usuario
+        $user = User::create($data);
+
+        // Login automático
         Auth::login($user);
 
         return redirect()->route('libros.index');
     }
 
-    public function loginForm(){
+    // Mostrar login
+    public function loginForm()
+    {
         return view('auth.login');
     }
 
-    //Método para iniciar sesión
-    public function login(Request $request){
-        //Validar datos en el formulario
-        $data = $request -> validate([
+    // Iniciar sesión
+    public function login(Request $request)
+    {
+        $data = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
-        
-        //Intentar realizar el inicio de sesion con la información del formulario
-        if(Auth::attempt($data)){
-            
-            $request -> session() -> regenerate();
 
-            //Ruta para enviar al usuario cuando se inicia sesión
-            return redirect() -> route('libros.index');
+        if (Auth::attempt($data)) {
+            $request->session()->regenerate();
+            return redirect()->route('libros.index');
         }
 
         return back()->withErrors([
             'email' => 'Datos incorrectos',
-
-        ]);
-
+        ])->onlyInput('email');
     }
 
-    //Método para cerrar sesión
-    public function logout(Request $request){
-
-        //Cerrar sesión
+    // Cerrar sesión
+    public function logout(Request $request)
+    {
         Auth::logout();
 
-        //Cerrar credenciales del usuario
-        $request -> session()->invalidate();
-        $request -> session()->regenerateToken();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/acceso');
-
     }
-
 }
-
