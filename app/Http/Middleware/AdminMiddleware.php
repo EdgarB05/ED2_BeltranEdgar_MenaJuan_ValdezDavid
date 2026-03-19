@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use Illuminate\Support\Facades\Auth;
+
 class AdminMiddleware
 {
     /**
@@ -23,6 +25,11 @@ class AdminMiddleware
         if(!Auth::user()->is_admin){
             return redirect()->route('hoteles.index')
             ->with('error', 'No cuentas con permisos de administrador');
+        }
+
+        if (!in_array(Auth::user()->role, $roles, true)) {
+            return redirect()->route('boletos.index')
+                ->with('error', 'No cuentas con permisos para acceder a esta sección.');
         }
 
         return $next($request);
