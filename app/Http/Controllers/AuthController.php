@@ -53,7 +53,7 @@ class AuthController extends Controller
         // Login automático
         Auth::login($user);
 
-        return redirect()->route('libros.index');
+        return redirect()->route('hoteles.index');
     }
 
     // Mostrar login
@@ -72,7 +72,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($data)) {
             $request->session()->regenerate();
-            return redirect()->route('libros.index');
+            return redirect()->route('hoteles.index');
         }
 
         return back()->withErrors([
