@@ -2,37 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Mostrar formulario de registro
     public function registerForm()
     {
         return view('auth.register');
     }
 
-    // Registrar usuario
     public function register(Request $request)
     {
+        $allowedRoles = Auth::check() && Auth::user()->role === 'administrador'
+            ? 'cliente,personal,administrador'
+            : 'cliente';
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required',
-            'edad' => 'required',
+            'phone' => 'required|string|max:30',
+            'edad' => 'required|integer|min:1',
             'password' => 'required|confirmed|min:8',
-            'role' => 'required|in:cliente,personal,administrador',
-
-            'cargo' => 'nullable|string|',
+            'role' => 'required|in:' . $allowedRoles,
+            'cargo' => 'nullable|string|max:255',
             'turno' => 'nullable|string|in:matutino,vespertino,nocturno',
         ]);
 
         $role = $request->role;
 
-        // Datos base
         $data = [
             'name' => $request->name,
             'email' => $request->email,
@@ -44,41 +44,44 @@ class AuthController extends Controller
             'turno' => $role === 'personal' ? ($request->turno ?? '') : '',
         ];
 
-<<<<<<< HEAD
-    
-        if ($request->role === 'personal') {
-            $data['cargo'] = $request->cargo;
-            $data['turno'] = $request->turno;
-        }
-
-=======
->>>>>>> ffaa61479c6a5cf156faa9450cf38ba74e245126
-        // Crear usuario
         $user = User::create($data);
 
-        // Login automático
-        Auth::login($user);
+        if (!Auth::check()) {
+            Auth::login($user);
+        }
 
-        return redirect()->route('hoteles.index') ->with('success', 'Usuario registrado correctamente.');
+        return redirect()->route('hoteles.index')
+            ->with('success', 'Usuario registrado correctamente.');
     }
 
-    // Mostrar login
     public function loginForm()
     {
         return view('auth.login');
     }
 
-    // Iniciar sesión
     public function login(Request $request)
     {
-        $data = $request->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($data)) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->route('hoteles.index');
+        }
+
+        $user = User::where('email', $credentials['email'])->first();
+
+        if ($user && !str_starts_with((string) $user->password, '$2y$') && $user->password === $credentials['password']) {
+            $user->password = Hash::make($credentials['password']);
+            $user->save();
+
+            Auth::login($user);
+            $request->session()->regenerate();
+
+            return redirect()->route('hoteles.index')
+                ->with('success', 'Tu contraseña fue actualizada correctamente.');
         }
 
         return back()->withErrors([
@@ -86,18 +89,16 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // Cerrar sesión
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/acceso');
+        return redirect()->route('acceso');
     }
-    
-     public function adminDashboard()
+
+    public function adminDashboard()
     {
         return view('admin.dashboard');
     }

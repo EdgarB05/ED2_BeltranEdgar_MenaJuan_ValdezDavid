@@ -20,7 +20,7 @@
 
         @if(auth()->user()->role === 'administrador')
             <a href="{{ route('registro') }}" class="btn btn-secondary mb-3 me-3">
-                Registrar nuevo 
+                Registrar nuevo usuario 
             </a>
 
             
@@ -49,7 +49,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($hoteles as $reservacion)
+            @forelse ($reservaciones as $reservacion)
                 <tr>
                     <td>{{ $reservacion->id }}</td>
                     <td>{{ $reservacion->nombrehuesped }}</td>

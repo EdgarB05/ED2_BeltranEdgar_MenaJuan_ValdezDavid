@@ -13,11 +13,9 @@ class ReservacionesController extends Controller
      */
     public function index()
     {
-        //
-        $hoteles = Hoteles::all();
+        $reservaciones = Reservaciones::latest()->get();
 
-        return view('hoteles.index', compact('hoteles'));
-
+        return view('hoteles.index', compact('reservaciones'));
     }
 
     /**

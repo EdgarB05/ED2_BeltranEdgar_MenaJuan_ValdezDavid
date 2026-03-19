@@ -1,18 +1,12 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReservacionesController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BoletosController;
-
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('acceso');
 });
-
-Route::put('libro/{id}', [
-    LibroController::class, 'update'
-    
-    ]) -> name('libros.update');
 
 Route::get('/registro', [AuthController::class, 'registerForm'])->name('registro');
 Route::post('/registro', [AuthController::class, 'register'])->name('registro.store');
@@ -22,15 +16,15 @@ Route::post('/acceso', [AuthController::class, 'login'])->name('acceso.store');
 Route::post('/cerrar', [AuthController::class, 'logout'])->name('cerrar');
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('hoteles', ReservacionesController::class);
+    Route::resource('hoteles', ReservacionesController::class)->only(['index']);
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:administrador'])->group(function () {
     Route::get('/admin-dashboard', [AuthController::class, 'adminDashboard'])
         ->name('admin-dashboard');
 });
 
-Route::middleware(['auth', 'role:empleado'])->group(function () {
+Route::middleware(['auth', 'role:personal'])->group(function () {
     Route::get('/empleado-dashboard', [AuthController::class, 'empleadoDashboard'])
         ->name('empleado-dashboard');
 });
