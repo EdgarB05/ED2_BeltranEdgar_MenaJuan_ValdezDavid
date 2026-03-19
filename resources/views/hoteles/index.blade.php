@@ -12,13 +12,22 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    <div class="d-flex justify-content-end mb-2 gap-2">
+    
+
+    <div class="d-flex justify-content-end mb-3 gap-3">
+
+        
+
         @if(auth()->user()->role === 'administrador')
             <a href="{{ route('registro') }}" class="btn btn-secondary mb-3 me-3">
-                Registrar nuevo usuario
+                Registrar nuevo 
             </a>
-        @endif
 
+            
+        @endif
+        
+        
+        
         <form action="{{ route('cerrar') }}" method="POST">
             @csrf
             <button class="btn btn-danger me-2"><i class="fa-solid fa-arrow-right-to-bracket"></i> Cerrar sesión</button>
@@ -29,19 +38,6 @@
         <thead>
             <tr>
                 <th>ID</th>
-<<<<<<< HEAD
-                <th>Huésped</th>
-                <th>Ingreso</th>
-                <th>Salida</th>
-                <th>Habitación</th>
-                <th>Método de pago</th>
-                <th>Estado</th>
-                <th>Servicios</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($reservaciones as $reservacion)
-=======
                 <th>Nombre Huesped</th>
                 <th>Fecha Ingreso</th>
                 <th>Fecha Fin</th>
@@ -54,7 +50,6 @@
         </thead>
         <tbody>
             @foreach ($hoteles as $reservacion)
->>>>>>> 03cda0964b7002b6c12349988b92b5ffea6492f6
                 <tr>
                     <td>{{ $reservacion->id }}</td>
                     <td>{{ $reservacion->nombrehuesped }}</td>
@@ -64,8 +59,6 @@
                     <td>{{ $reservacion->metodopago }}</td>
                     <td>{{ $reservacion->estadocontrato }}</td>
                     <td>{{ $reservacion->servicios }}</td>
-<<<<<<< HEAD
-=======
                     @if(auth()->user()->role === 'cliente' || auth()->user()->role === 'administrador')
                         <td>
                             <a href="{{ route('hoteles.edit', $reservacion) }}" class="btn btn-warning">
@@ -80,7 +73,6 @@
                             </form>
                         </td>
                     @endif
->>>>>>> 03cda0964b7002b6c12349988b92b5ffea6492f6
                 </tr>
             @empty
                 <tr>
