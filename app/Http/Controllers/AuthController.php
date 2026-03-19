@@ -24,9 +24,8 @@ class AuthController extends Controller
             'phone' => 'required',
             'edad' => 'required',
             'password' => 'required|confirmed|min:8',
-            'role' => 'required|in:administrador,personal',
+            'role' => 'required|in:cliente,empleado,administrador',
 
-            // Solo se validan si es personal
             'cargo' => 'nullable|string|',
             'turno' => 'nullable|string|',
         ]);

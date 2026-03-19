@@ -21,18 +21,16 @@
             <br>
             <input type="number" name="edad" placeholder="Edad" class="form-control" required>
             <br>
-
-                @if(auth()->check() && auth()->user()->role === 'administrador')
-                    <input type="text" name="cargo" placeholder="Cargo" class="form-control" required>
-                    <br>
-
-                    <select name="turno" class="form-control" required>
-                        <option value="">Selecciona un turno</option>
-                        <option value="matutino" {{ old('turno') == 'matutino' ? 'selected' : '' }}>Matutino</option>
-                        <option value="vespertino" {{ old('turno') == 'vespertino' ? 'selected' : '' }}>Vespertino</option>
-                        <option value="nocturno" {{ old('turno') == 'nocturno' ? 'selected' : '' }}>Nocturno</option>
-                    </select>
-                @endif
+            @if(auth()->check() && auth()->user()->role === 'administrador')
+                <input type="text" name="cargo" placeholder="Cargo" class="form-control" required>
+                <br>
+                <select name="turno" class="form-control" required>
+                    <option value="">Selecciona un turno</option>
+                    <option value="matutino" {{ old('turno') == 'matutino' ? 'selected' : '' }}>Matutino</option>
+                    <option value="vespertino" {{ old('turno') == 'vespertino' ? 'selected' : '' }}>Vespertino</option>
+                    <option value="nocturno" {{ old('turno') == 'nocturno' ? 'selected' : '' }}>Nocturno</option>
+                </select>
+            @endif
             <input type="password" name="password" placeholder="Contraseña" class="form-control" required>
             <br>
             <input type="password" name="password_confirmation" placeholder="Confirmar contraseña" class="form-control" required>
