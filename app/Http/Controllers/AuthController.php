@@ -22,6 +22,7 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users',            
             'phone' => 'required',
             'password' => 'required|confirmed|min:8',
+            'role' => 'required|in:cliente,empleado,administrador',
         ]);
         //Guardar información en la base de datos
         $user = User::create([
@@ -30,7 +31,7 @@ class AuthController extends Controller
             'email' => $request -> email,
             'phone' => $request -> phone,
             'password' => Hash::make($request->password),
-            'is_admin' => $request->has('is_admin'),
+            'role' => $request->role,
         ]);
 
 
@@ -82,10 +83,5 @@ class AuthController extends Controller
 
     }
 
-    //Metodo para regresar vista de controlador
-
-    public function adminDashboard(){
-        return view('admin.dashboard');
-    }
 }
 
