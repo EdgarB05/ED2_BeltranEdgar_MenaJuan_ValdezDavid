@@ -21,28 +21,37 @@
             <br>
             <input type="number" name="edad" placeholder="Edad" class="form-control" required>
             <br>
-            @if(auth()->check() && auth()->user()->role === 'administrador')
-                <input type="text" name="cargo" placeholder="Cargo" class="form-control" required>
+            @auth
+            @if(auth()->user()->role === 'administrador')
+                <input type="text" name="cargo" value="{{ old('cargo') }}" placeholder="Cargo (solo personal)" class="form-control">
                 <br>
-                <select name="turno" class="form-control" required>
+                <select name="turno" class="form-control">
                     <option value="">Selecciona un turno</option>
-                    <option value="matutino" {{ old('turno') == 'matutino' ? 'selected' : '' }}>Matutino</option>
-                    <option value="vespertino" {{ old('turno') == 'vespertino' ? 'selected' : '' }}>Vespertino</option>
-                    <option value="nocturno" {{ old('turno') == 'nocturno' ? 'selected' : '' }}>Nocturno</option>
+                    <option value="matutino" {{ old('turno') === 'matutino' ? 'selected' : '' }}>Matutino</option>
+                    <option value="vespertino" {{ old('turno') === 'vespertino' ? 'selected' : '' }}>Vespertino</option>
+                    <option value="nocturno" {{ old('turno') === 'nocturno' ? 'selected' : '' }}>Nocturno</option>
                 </select>
+                <br>
             @endif
+        @endauth
             <input type="password" name="password" placeholder="Contraseña" class="form-control" required>
             <br>
             <input type="password" name="password_confirmation" placeholder="Confirmar contraseña" class="form-control" required>
             <br>
 
             <select name="role" class="form-control" required>
-                <option value="">Selecciona un tipo de usuario</option>
-                <option value="cliente" {{ old('role') === 'cliente' ? 'selected' : '' }}>Cliente</option>
-                @if(auth()->check() && auth()->user()->role === 'administrador')
-                    <option value="empleado" {{ old('role') === 'empleado' ? 'selected' : '' }}>Empleado</option>
-                    <option value="empleado" {{ old('role') === 'administrador' ? 'selected' : '' }}>Administrador</option>
-                @endif
+                @guest
+                <option value="cliente" selected>Cliente</option>
+                @else
+                    @if(auth()->user()->role === 'administrador')
+                        <option value="">Selecciona un tipo de usuario</option>
+                        <option value="cliente" {{ old('role') === 'cliente' ? 'selected' : '' }}>Cliente</option>
+                        <option value="personal" {{ old('role') === 'personal' ? 'selected' : '' }}>Personal</option>
+                        <option value="administrador" {{ old('role') === 'administrador' ? 'selected' : '' }}>Administrador</option>
+                    @else
+                        <option value="cliente" selected>Cliente</option>
+                    @endif
+                @endguest
                 </select>
             <br>
             <button type="submit" class="btn btn-success">Guardar</button>
