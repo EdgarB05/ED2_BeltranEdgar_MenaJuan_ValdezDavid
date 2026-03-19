@@ -28,7 +28,7 @@ class AdminMiddleware
         }
 
         if (!in_array(Auth::user()->role, $roles, true)) {
-            return redirect()->route('boletos.index')
+            return redirect()->route('hoteles.index')
                 ->with('error', 'No cuentas con permisos para acceder a esta sección.');
         }
 

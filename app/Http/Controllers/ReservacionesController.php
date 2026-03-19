@@ -12,7 +12,10 @@ class ReservacionesController extends Controller
     public function index()
     {
         //
-        
+        $hoteles = Hoteles::all();
+
+        return view('hoteles.index', compact('hoteles'));
+
     }
 
     /**
@@ -21,6 +24,7 @@ class ReservacionesController extends Controller
     public function create()
     {
         //
+        return view('hoteles.create');
     }
 
     /**
