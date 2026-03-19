@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Reservaciones extends Model
 {
     //
-    protected $fillable = ['equipos', 'estadio', 'fecha', 'hora', 'zona', 'fila', 'asiento'];
+    protected $fillable = ['nombre', 'estadio', 'fecha', 'hora', 'zona', 'fila', 'asiento'];
 }
