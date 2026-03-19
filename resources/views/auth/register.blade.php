@@ -29,6 +29,7 @@
                 <option value="">Selecciona un tipo de usuario</option>
                 <option value="cliente" {{ old('role') === 'cliente' ? 'selected' : '' }}>Cliente</option>
                 <option value="empleado" {{ old('role') === 'empleado' ? 'selected' : '' }}>Empleado</option>
+                <option value="administrador" {{ old('role') === 'administrador' ? 'selected' : '' }}>Administrador</option>
             </select>
             <br>
             <button type="submit" class="btn btn-success">Guardar</button>
