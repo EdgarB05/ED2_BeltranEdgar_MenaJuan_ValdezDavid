@@ -29,6 +29,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+<<<<<<< HEAD
                 <th>Huésped</th>
                 <th>Ingreso</th>
                 <th>Salida</th>
@@ -40,6 +41,20 @@
         </thead>
         <tbody>
             @forelse ($reservaciones as $reservacion)
+=======
+                <th>Nombre Huesped</th>
+                <th>Fecha Ingreso</th>
+                <th>Fecha Fin</th>
+                <th>Num Habitación</th>
+                <th>Metodo Pago</th>
+                <th>EstadoContrato</th>
+                <th>Servicios</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($hoteles as $reservacion)
+>>>>>>> 03cda0964b7002b6c12349988b92b5ffea6492f6
                 <tr>
                     <td>{{ $reservacion->id }}</td>
                     <td>{{ $reservacion->nombrehuesped }}</td>
@@ -49,6 +64,23 @@
                     <td>{{ $reservacion->metodopago }}</td>
                     <td>{{ $reservacion->estadocontrato }}</td>
                     <td>{{ $reservacion->servicios }}</td>
+<<<<<<< HEAD
+=======
+                    @if(auth()->user()->role === 'cliente' || auth()->user()->role === 'administrador')
+                        <td>
+                            <a href="{{ route('hoteles.edit', $reservacion) }}" class="btn btn-warning">
+                                <i class="fa-regular fa-pen-to-square"></i>
+                            </a>
+                            <form action="{{ route('hoteles.destroy', $reservacion) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger" onclick="return confirm('¿Eliminar el registro?')">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    @endif
+>>>>>>> 03cda0964b7002b6c12349988b92b5ffea6492f6
                 </tr>
             @empty
                 <tr>

@@ -44,6 +44,15 @@ class AuthController extends Controller
             'turno' => $role === 'personal' ? ($request->turno ?? '') : '',
         ];
 
+<<<<<<< HEAD
+    
+        if ($request->role === 'personal') {
+            $data['cargo'] = $request->cargo;
+            $data['turno'] = $request->turno;
+        }
+
+=======
+>>>>>>> ffaa61479c6a5cf156faa9450cf38ba74e245126
         // Crear usuario
         $user = User::create($data);
 
